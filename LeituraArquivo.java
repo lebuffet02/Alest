@@ -28,28 +28,27 @@ public class LeituraArquivo {
 
         for (int i = 0; i < 5; i++) {
             String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
-           // System.out.println(campos[0]);
-            String logradouro = campos[0].substring(0,campos[0].indexOf(" "));
-            String nomeLog = campos[0].substring(campos[0].indexOf(" ")+1,campos[0].length());
-            String tipoAcidente = campos[1];
+            String logradouro = campos[0].substring(0,campos[0].indexOf(" ")); // AV, R, TV Logradouro
+            String nomeLog = campos[0].substring(campos[0].indexOf(" ")+1,campos[0].length()); // Nome do logradoura Borges, ipiranga etc
+            String tipoAcidente = campos[1]; // Abalroamento
             LocalDateTime data = LocalDateTime.of(
                     Integer.parseInt(campos[2].substring(0,4)), Integer.parseInt(campos[2].substring(4,6)), Integer.parseInt(campos[2].substring(6,8)), 
                     Integer.parseInt(campos[2].substring(9,11)), Integer.parseInt(campos[2].substring(12,14)));
-            String diaSemana = campos[3];
-            int feridos = Integer.parseInt(campos[4]);
-            int fatais = Integer.parseInt(campos[5]);
-            int auto = Integer.parseInt(campos[6]);
-            int taxi = Integer.parseInt(campos[7]);
-            int lotacao = Integer.parseInt(campos[8]);
-            int onibusUrb = Integer.parseInt(campos[9]);
-            int onibusInt = Integer.parseInt(campos[10]);
-            int caminhao = Integer.parseInt(campos[11]);
-            int moto = Integer.parseInt(campos[12]);
-            int carroca = Integer.parseInt(campos[13]);
-            int bicicleta = Integer.parseInt(campos[14]); 
-            String tempo = campos[15];
-            String turno = campos[16];
-            String regiao = campos[17];
+            String diaSemana = campos[3]; // dia da semana Segunda, Terca, Quarta etc
+            int feridos = Integer.parseInt(campos[4]); // numero de feridos
+            int fatais = Integer.parseInt(campos[5]); // numero de feridos fatais
+            int auto = Integer.parseInt(campos[6]); // numero de veiculos
+            int taxi = Integer.parseInt(campos[7]); // numero de veiculos
+            int lotacao = Integer.parseInt(campos[8]); // numero de veiculos 
+            int onibusUrb = Integer.parseInt(campos[9]); // numero de veiculos
+            int onibusInt = Integer.parseInt(campos[10]); // numero de veiculos
+            int caminhao = Integer.parseInt(campos[11]); // numero de veiculos
+            int moto = Integer.parseInt(campos[12]); // numero de veiculos
+            int carroca = Integer.parseInt(campos[13]); // numero de veiculos
+            int bicicleta = Integer.parseInt(campos[14]);  // numero de veiculos
+            String tempo = campos[15]; // Bom, chuvoso
+            String turno = campos[16]; // DIA ou noite
+            String regiao = campos[17]; // Norte, Sul, Centro, Leste, Oeste
             System.out.println(logradouro+" "+nomeLog+"; "+tipoAcidente+"; "+data.toString()+"; "+tempo+"; "+turno+"; "+regiao); 
                     
         }
