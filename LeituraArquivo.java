@@ -8,11 +8,13 @@ import java.time.LocalDateTime;
 
 public class LeituraArquivo {
 
+    private static String path = "C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv";
+
     public static void main(String[] args) {
         String linhas[] = new String[100000];
         int numLinhas = 0;
 
-        Path path1 = Paths.get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/acidentes.csv");
+        Path path1 = Paths.get(path);
 
         try (BufferedReader reader = Files.newBufferedReader(path1, Charset.defaultCharset())) {
             String line = reader.readLine();
