@@ -1,10 +1,14 @@
+package Alest;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class LeituraArquivo {
 
@@ -26,7 +30,10 @@ public class LeituraArquivo {
             System.err.format("Erro na leitura do arquivo: ", e);
         }
 
-        for (int i = 0; i < 5; i++) {
+        ColecaoEncadeada lst = new ColecaoEncadeada();
+        ArrayList ListaDeAcidentes = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
             String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
             String logradouro = campos[0].substring(0,campos[0].indexOf(" ")); // AV, R, TV Logradouro
             String nomeLog = campos[0].substring(campos[0].indexOf(" ")+1,campos[0].length()); // Nome do logradoura Borges, ipiranga etc
@@ -49,8 +56,28 @@ public class LeituraArquivo {
             String tempo = campos[15]; // Bom, chuvoso
             String turno = campos[16]; // DIA ou noite
             String regiao = campos[17]; // Norte, Sul, Centro, Leste, Oeste
-            System.out.println(logradouro+" "+nomeLog+"; "+tipoAcidente+"; "+data.toString()+"; "+tempo+"; "+turno+"; "+regiao); 
-                    
+            // System.out.println(logradouro+" "+nomeLog+"; "+tipoAcidente+"; "+data.toString()+"; "+tempo+"; "+turno+"; "+regiao); 
+
+            
+            Acidentes acidente = new Acidentes(logradouro, nomeLog, tipoAcidente, data, diaSemana, feridos, fatais, auto, taxi, lotacao, onibusUrb, onibusInt, caminhao, moto, carroca, bicicleta, tempo, turno, regiao);
+
+            ListaDeAcidentes.add(acidente);
+
+            // esta funcao serve para validar se o logradouro ja existe dentro da lista, evita duplicacao
+            boolean validado = true;
+            for (int j = 0; j < lst.size(); j++) {
+                if(lst.get(j).equals(nomeLog)) {
+                    validado = false;
+                    break;
+                } 
+            }
+            if(validado) {
+                lst.addFirst(nomeLog);
+            } 
+        }
+        // System.out.println(lst);
+        for (int i = 0; i < ListaDeAcidentes.size(); i++) {
+            System.out.println(ListaDeAcidentes.get(i).toString());
         }
     }
 }
