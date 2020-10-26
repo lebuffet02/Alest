@@ -1,26 +1,25 @@
 package Alest;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LeituraArquivo {
 
-    private static String path = "C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv";
-
     public static void main(String[] args) {
+
         String linhas[] = new String[100000];
         int numLinhas = 0;
 
-        Path path1 = Paths.get(path);
+        Path filePath = Paths.get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
 
-        try (BufferedReader reader = Files.newBufferedReader(path1, Charset.defaultCharset())) {
+        // Ler o arquivo
+        try (BufferedReader reader = Files.newBufferedReader(filePath, Charset.defaultCharset())) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 linhas[numLinhas] = line;
@@ -30,54 +29,85 @@ public class LeituraArquivo {
             System.err.format("Erro na leitura do arquivo: ", e);
         }
 
-        ColecaoEncadeada lst = new ColecaoEncadeada();
-        ArrayList ListaDeAcidentes = new ArrayList<>();
+        // Aceita os seguintes formatos de data/horario
+        // 20200101         (somente data)
+        // 20200101 08:00   (data e horario)
+        // 20200101 8 :00   (horario sem zero à esquerda da hora)
+        Pattern datePattern = Pattern.compile("(\\d{4})(\\d{2})(\\d{2})(?: (?:(\\d{2})|(\\d) ):(\\d{2}))?", Pattern.CASE_INSENSITIVE);
 
-        for (int i = 0; i < 10; i++) {
-            String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
-            String logradouro = campos[0].substring(0,campos[0].indexOf(" ")); // AV, R, TV Logradouro
-            String nomeLog = campos[0].substring(campos[0].indexOf(" ")+1,campos[0].length()); // Nome do logradoura Borges, ipiranga etc
-            String tipoAcidente = campos[1]; // Abalroamento
-            LocalDateTime data = LocalDateTime.of(
-                    Integer.parseInt(campos[2].substring(0,4)), Integer.parseInt(campos[2].substring(4,6)), Integer.parseInt(campos[2].substring(6,8)), 
-                    Integer.parseInt(campos[2].substring(9,11)), Integer.parseInt(campos[2].substring(12,14)));
-            String diaSemana = campos[3]; // dia da semana Segunda, Terca, Quarta etc
-            int feridos = Integer.parseInt(campos[4]); // numero de feridos
-            int fatais = Integer.parseInt(campos[5]); // numero de feridos fatais
-            int auto = Integer.parseInt(campos[6]); // numero de veiculos
-            int taxi = Integer.parseInt(campos[7]); // numero de veiculos
-            int lotacao = Integer.parseInt(campos[8]); // numero de veiculos 
-            int onibusUrb = Integer.parseInt(campos[9]); // numero de veiculos
-            int onibusInt = Integer.parseInt(campos[10]); // numero de veiculos
-            int caminhao = Integer.parseInt(campos[11]); // numero de veiculos
-            int moto = Integer.parseInt(campos[12]); // numero de veiculos
-            int carroca = Integer.parseInt(campos[13]); // numero de veiculos
-            int bicicleta = Integer.parseInt(campos[14]);  // numero de veiculos
-            String tempo = campos[15]; // Bom, chuvoso
-            String turno = campos[16]; // DIA ou noite
-            String regiao = campos[17]; // Norte, Sul, Centro, Leste, Oeste
-            // System.out.println(logradouro+" "+nomeLog+"; "+tipoAcidente+"; "+data.toString()+"; "+tempo+"; "+turno+"; "+regiao); 
 
+        // Mude numLinhas para algum numero pequeno para executar testes mais rapidamente.
+        // Ex:
+
+        ListaDeAcidentes lista = new ListaAcidentes();
+
+        for (int i = 0; i < 50; i++) {
+        // for (int i = 0; i < numLinhas; i++) {
             
-            Acidentes acidente = new Acidentes(logradouro, nomeLog, tipoAcidente, data, diaSemana, feridos, fatais, auto, taxi, lotacao, onibusUrb, onibusInt, caminhao, moto, carroca, bicicleta, tempo, turno, regiao);
+            String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
 
-            ListaDeAcidentes.add(acidente);
-
-            // esta funcao serve para validar se o logradouro ja existe dentro da lista, evita duplicacao
-            boolean validado = true;
-            for (int j = 0; j < lst.size(); j++) {
-                if(lst.get(j).equals(nomeLog)) {
-                    validado = false;
-                    break;
-                } 
+            // Ignorar esta linha caso o campo de endereco nao
+            // puder ser separado em 2
+            if (campos[0].split(" ").length < 2) {
+                continue;
             }
-            if(validado) {
-                lst.addFirst(nomeLog);
-            } 
-        }
-        // System.out.println(lst);
-        for (int i = 0; i < ListaDeAcidentes.size(); i++) {
-            System.out.println(ListaDeAcidentes.get(i).toString());
+
+            // Determinar data e horario.        
+            Matcher dateMatcher = datePattern.matcher(campos[2]);
+            dateMatcher.matches();
+
+            int ano = Integer.parseInt(dateMatcher.group(1));
+            int mes = Integer.parseInt(dateMatcher.group(2));
+            int dia = Integer.parseInt(dateMatcher.group(3));
+
+            int hora;
+            if (dateMatcher.group(4) != null) {
+                hora = Integer.parseInt(dateMatcher.group(4));
+            }
+            else if (dateMatcher.group(5) != null) {               
+                hora = Integer.parseInt(dateMatcher.group(5));
+            }
+            else {
+                hora = 0;
+            }
+
+            int minuto;
+            if (dateMatcher.group(6) != null) {
+                minuto = Integer.parseInt(dateMatcher.group(6));
+            }
+            else {
+                minuto = 0;
+            }
+
+            String logradouro = campos[0].split(" ", 2)[0];
+            String nomeLog = campos[0].split(" ", 2)[1];
+            String tipoAcidente = campos[1];
+            LocalDateTime data = LocalDateTime.of(ano, mes, dia, hora, minuto);
+            String diaSemana = campos[3];
+            int feridos = Integer.parseInt(campos[4]);
+            int fatais = Integer.parseInt(campos[5]);
+            int auto = Integer.parseInt(campos[6]);
+            int taxis = Integer.parseInt(campos[7]);
+            int lotacao = Integer.parseInt(campos[8]);
+            int onibusUrb = Integer.parseInt(campos[9]);
+            int onibusInt = Integer.parseInt(campos[10]);
+            int caminhao = Integer.parseInt(campos[11]);
+            int moto = Integer.parseInt(campos[12]);
+            int carroca = Integer.parseInt(campos[13]);
+            int bicicleta = Integer.parseInt(campos[14]); 
+            String tempo = campos[15];
+            String turno = campos[16];
+            String regiao = campos[17];
+
+            Acidentes acidente = new Acidentes(logradouro, nomeLog,tipoAcidente, data, diaSemana,
+            feridos,fatais,auto,taxi,lotacao,onibusUrb,onibusInt, caminhao,
+            moto,carroca,bicicleta,tempo,turno, regiao);
+
+            lista.AddFirst(acidente);
+            
+            System.out.println(logradouro + " " + nomeLog + "; " + tipoAcidente + "; " + data.toString() + "; " + tempo + "; " + turno + "; " + regiao); 
+
+
         }
     }
 }
