@@ -43,7 +43,7 @@ public class LeituraArquivo {
 
         ListaDeAcidentes lista = new ListaDeAcidentes();
 
-        for (int i = 0; i < 83; i++) {
+        for (int i = 0; i < numLinhas; i++) {
         // for (int i = 0; i < numLinhas; i++) {
             
             String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
@@ -109,9 +109,10 @@ public class LeituraArquivo {
             // System.out.println(logradouro + " " + nomeLog + "; " + tipoAcidente + "; " + data.toString() + "; " + tempo + "; " + turno + "; " + regiao); 
         }
 
-        System.out.println(lista.toString());
+        // System.out.println(lista.getAcidentes("VENANCIO AIRES"));
 
-        // System.out.println(lista.getAcidentes("IPIRANGA").toString());
+        // System.out.println(lista.getLogradouroComMaisAcidentes());
+        System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
 
         System.out.println("Digite um número de 1 a 5");
         numero = resposta.nextInt();
@@ -146,4 +147,5 @@ public class LeituraArquivo {
             }
         }
     
+        // System.out.println(lista.getAcidentes("IPIRANGA").toString());
     }

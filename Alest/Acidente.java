@@ -205,11 +205,7 @@ public class Acidente {
 
     @Override
     public String toString() {
-        return "auto=" + auto + ", bicicleta=" + bicicleta + ", caminhao=" + caminhao + ", carroca="
-                + carroca + ", data=" + data + ", diaSemana=" + diaSemana + ", fatais=" + fatais + ", feridos="
-                + feridos + ", logradouro=" + logradouro + ", lotacao=" + lotacao + ", moto=" + moto + ", nomeLog="
-                + nomeLog + ", onibusInt=" + onibusInt + ", onibusUrb=" + onibusUrb + ", regiao=" + regiao + ", taxi="
-                + taxi + ", tempo=" + tempo + ", tipoAcidente=" + tipoAcidente + ", turno=" + turno;
+        return "nomeLogradouro= " + nomeLog + " data= " + data + " diaSemana= " + diaSemana + " \n";
     }
 
     

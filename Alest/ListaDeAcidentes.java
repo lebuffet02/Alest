@@ -13,23 +13,22 @@ public class ListaDeAcidentes {
         private String tipoLogradouro;
         private String nomeLogradouro;
         private NodoAcidente refHeadAcidente;
+        private NodoAcidente refTailAcidente;
         private NodoLogradouro refNextLogradouro;
+        private NodoLogradouro refPrevLogradouro;
 
         public void addLogradouro(Acidente acidente) {
             this.tipoLogradouro = acidente.getLogradouro();
             this.nomeLogradouro = acidente.getNomeLog();
             NodoAcidente node = new NodoAcidente(acidente);
             this.refHeadAcidente = node;
+            this.refTailAcidente = null;
             this.refNextLogradouro = null;
         };
 
         public NodoLogradouro(Acidente acidente){
             addLogradouro(acidente);
         }
-
-        // public List<Acidente> getListaAcidentes() {
-
-        // }
 
         public String getTipoLogradouro() {
             return tipoLogradouro;
@@ -63,16 +62,25 @@ public class ListaDeAcidentes {
             this.refNextLogradouro = refNextLogradouro;
         }
 
+        public NodoLogradouro getRefPrevLogradouro() {
+            return refPrevLogradouro;
+        }
+
+        public void setRefPrevLogradouro(NodoLogradouro refPrevLogradouro) {
+            this.refPrevLogradouro = refPrevLogradouro;
+        };
+
         @Override
         public String toString() {
             return "NodoLogradouro [nomeLogradouro=" + nomeLogradouro + ", refHeadAcidente=" + refHeadAcidente
                     + ", refNextLogradouro=" + refNextLogradouro + ", tipoLogradouro=" + tipoLogradouro + "] \n";
-        };
+        }
     }
 
     private class NodoAcidente {
         private Acidente elem;
         private NodoAcidente refNextAcidente;
+        private NodoAcidente refPrevAcidente;
 
         public NodoAcidente(Acidente elem) {
             this.elem = elem;
@@ -93,6 +101,14 @@ public class ListaDeAcidentes {
 
         public void setRefNextAcidente(NodoAcidente refNextAcidente) {
             this.refNextAcidente = refNextAcidente;
+        }
+
+        public NodoAcidente getRefPrevAcidente() {
+            return refPrevAcidente;
+        }
+
+        public void setRefPrevAcidente(NodoAcidente refPrevAcidente) {
+            this.refPrevAcidente = refPrevAcidente;
         }
 
         @Override
@@ -126,6 +142,7 @@ public class ListaDeAcidentes {
             prox = ant.getRefNextLogradouro();
 			ant.setRefNextLogradouro(novo);
             novo.setRefNextLogradouro(prox);
+            novo.setRefPrevLogradouro(ant);
             qtdElem++;
             return true;
         } else  {
@@ -138,6 +155,7 @@ public class ListaDeAcidentes {
             next = prev.getRefNextAcidente();
             prev.setRefNextAcidente(novo1);
             novo1.setRefNextAcidente(next);
+            novo1.setRefPrevAcidente(prev);
             return true;
         }
     };
@@ -147,9 +165,79 @@ public class ListaDeAcidentes {
         novo.setRefNextLogradouro(refHeadLogradouro);
 		this.refHeadLogradouro = novo;
 		qtdElem++;
-	}
+    }
+    
 
+    public String getLogradouroComMaisAcidentes() {
+        NodoLogradouro aux;
+        NodoAcidente acidente;
+        int cont = 0;
+        int contMaior = 0;
+        NodoLogradouro maisAcidentes = null;
 
+        if(refHeadLogradouro != null) {
+            aux = refHeadLogradouro;
+            for (int i = 1; i <= qtdElem; i++) {
+                acidente = aux.getRefHeadAcidente();
+                if (acidente != null) {
+                    cont++;
+                    while (acidente.getRefNextAcidente() != null) {
+                        cont++;
+                        acidente = acidente.getRefNextAcidente();
+                    }
+                    if(contMaior < cont) {
+                        maisAcidentes = aux;
+                        contMaior = cont;
+                    }
+                }
+                cont = 0;
+                aux = aux.getRefNextLogradouro();
+            }
+            return maisAcidentes.getNomeLogradouro();
+        }
+        return "Nao ha logradouros nessa lista";
+    }
+
+    public ObjetoDiaDaSemana getDiaDaSemanaComMaisAcidentes(String rua) {
+        NodoLogradouro aux;
+        NodoAcidente acidente;
+        ArrayList<ObjetoDiaDaSemana> listaDiasDasemana = new ArrayList<>();
+        ObjetoDiaDaSemana object;
+        int controle = 0;
+
+        if(refHeadLogradouro != null) {
+            aux = refHeadLogradouro;
+            for (int i = 1; i <= qtdElem; i++) {
+                if(aux.getNomeLogradouro().equals(rua)){
+                    acidente = aux.getRefHeadAcidente();
+                    while(acidente != null) {
+                        controle = 0;
+                        object = new ObjetoDiaDaSemana(acidente.getElem().getDiaSemana());
+                        for (int j = 0; j < listaDiasDasemana.size(); j++) {
+                            if (object.getDiaDaSemana().equals(listaDiasDasemana.get(j).getDiaDaSemana())) {
+                                listaDiasDasemana.get(j).aumentaAcidentes();
+                                controle = 1;
+                            }
+                        }
+                        if(controle == 0) listaDiasDasemana.add(object);
+                        acidente = acidente.getRefNextAcidente();
+                    }
+                }
+                aux = aux.getRefNextLogradouro();
+            }
+            ObjetoDiaDaSemana auxiliar = null;
+            int qtdAcidentes = 0;
+            for (ObjetoDiaDaSemana objetoDiaDaSemana : listaDiasDasemana) {
+                if(qtdAcidentes <= objetoDiaDaSemana.getQtdAcidentes()) {
+                    qtdAcidentes = objetoDiaDaSemana.getQtdAcidentes();
+                    auxiliar = objetoDiaDaSemana;
+                }
+            }
+            return auxiliar;
+        }
+        return null;
+    }
+    
     public NodoLogradouro alredyExists(String nomeLogradouro) {
 		NodoLogradouro aux;
         int i;
@@ -169,16 +257,18 @@ public class ListaDeAcidentes {
         NodoLogradouro aux;
         NodoAcidente acidente;
 
-        ArrayList lista = new ArrayList<Acidente>();
+        ArrayList<Acidente> lista = new ArrayList<Acidente>();
 
         if (refHeadLogradouro != null) {
             aux = refHeadLogradouro;
             for (int i = 1; i <= qtdElem; i++){
-                if(aux.getNomeLogradouro() == nomeLogradouro) {
+                if(aux.getNomeLogradouro().equals(nomeLogradouro)) {
                     acidente = aux.getRefHeadAcidente();
-                    while (acidente.getRefNextAcidente() != null) {
-                        lista.add(acidente);
-                        acidente = acidente.getRefNextAcidente();
+                    if (acidente != null) {
+                        while (acidente.getRefNextAcidente() != null) {
+                            lista.add(acidente.getElem());
+                            acidente = acidente.getRefNextAcidente();
+                        }
                     }
                 }
                 aux = aux.getRefNextLogradouro();
@@ -203,11 +293,17 @@ public class ListaDeAcidentes {
         this.refTailLogradouro = refTailLogradouro;
     }
 
+    public int getQtdElem() {
+        return qtdElem;
+    }
+
     @Override
     public String toString() {
         return "ListaDeAcidentes [qtdElem=" + qtdElem + ", refHeadLogradouro=" + refHeadLogradouro
                 + ", refTailLogradouro=" + refTailLogradouro + "] \n";
-    };
+    }
+
+
 
 }
 
