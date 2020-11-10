@@ -109,7 +109,8 @@ public class LeituraArquivo {
 
         // System.out.println(lista.getAcidentes("VENANCIO AIRES"));
 
-        System.out.println(lista.getLogradouroComMaisAcidentes());
+        // System.out.println(lista.getLogradouroComMaisAcidentes());
+        System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
 
         // System.out.println(lista.getAcidentes("IPIRANGA").toString());
     }

@@ -190,7 +190,46 @@ public class ListaDeAcidentes {
         return "Nao ha logradouros nessa lista";
     }
 
+    public ObjetoDiaDaSemana getDiaDaSemanaComMaisAcidentes(String rua) {
+        NodoLogradouro aux;
+        NodoAcidente acidente;
+        ArrayList<ObjetoDiaDaSemana> listaDiasDasemana = new ArrayList<>();
+        ObjetoDiaDaSemana object;
+        int controle = 0;
 
+        if(refHeadLogradouro != null) {
+            aux = refHeadLogradouro;
+            for (int i = 1; i <= qtdElem; i++) {
+                if(aux.getNomeLogradouro().equals(rua)){
+                    acidente = aux.getRefHeadAcidente();
+                    while(acidente != null) {
+                        controle = 0;
+                        object = new ObjetoDiaDaSemana(acidente.getElem().getDiaSemana());
+                        for (int j = 0; j < listaDiasDasemana.size(); j++) {
+                            if (object.getDiaDaSemana().equals(listaDiasDasemana.get(j).getDiaDaSemana())) {
+                                listaDiasDasemana.get(j).aumentaAcidentes();
+                                controle = 1;
+                            }
+                        }
+                        if(controle == 0) listaDiasDasemana.add(object);
+                        acidente = acidente.getRefNextAcidente();
+                    }
+                }
+                aux = aux.getRefNextLogradouro();
+            }
+            ObjetoDiaDaSemana auxiliar = null;
+            int qtdAcidentes = 0;
+            for (ObjetoDiaDaSemana objetoDiaDaSemana : listaDiasDasemana) {
+                if(qtdAcidentes <= objetoDiaDaSemana.getQtdAcidentes()) {
+                    qtdAcidentes = objetoDiaDaSemana.getQtdAcidentes();
+                    auxiliar = objetoDiaDaSemana;
+                }
+            }
+            return auxiliar;
+        }
+        return null;
+    }
+    
     public NodoLogradouro alredyExists(String nomeLogradouro) {
 		NodoLogradouro aux;
         int i;
