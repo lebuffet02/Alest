@@ -8,13 +8,15 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class LeituraArquivo {
 
     public static void main(String[] args) {
-
+        Scanner resposta = new Scanner(System.in);
         String linhas[] = new String[100000];
         int numLinhas = 0;
+        int numero;
 
         Path filePath = Paths.get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
 
@@ -111,6 +113,37 @@ public class LeituraArquivo {
 
         // System.out.println(lista.getAcidentes("IPIRANGA").toString());
 
+        System.out.println("Digite um número de 1 a 5");
+        numero = resposta.nextInt();
+      
+            switch (numero) {
+
+                case 1: {
+                    System.out.println(" ");
+                    break;
+                }
+                case 2: {
+                    System.out.println(" ");
+                    break;
+                }
+                case 3: {
+                    System.out.println(" ");
+                    break;
+                }
+                case 4: {
+                    System.out.println(" ");
+                    break;
+                }
+                case 5: {
+                    System.out.println(" ");
+                    break;
+                }
+                default: {
+                    System.out.println("Valor Inválido!");  
+                    break; 
+                }
         
+            }
+        }
+    
     }
-}

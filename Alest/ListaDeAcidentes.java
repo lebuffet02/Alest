@@ -1,3 +1,9 @@
+//1. Rua/av/trav na qual ocorreram mais acidentes;
+//2. Identificar para uma determinada rua/av/trav o dia da semana em que mais ocorreram acidentes;
+//3. Apresentar o total de acidentes envolvendo moto;
+//4. Permitir navegar pelos acidentes ordenados por rua/av/trav, isto é, avançar e retroceder, apresentando
+//também o total de acidentes desta rua/av/trav.
+
 package Alest;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +106,9 @@ public class ListaDeAcidentes {
     private NodoLogradouro refTailLogradouro = null;
     private int qtdElem = 0;
 
-    public ListaDeAcidentes() {}
+    public ListaDeAcidentes() {
+        
+    }
 
     public boolean addLogradouroAcidente(Acidente acidente) {
         NodoLogradouro ant, novo, prox = null;
@@ -201,4 +209,24 @@ public class ListaDeAcidentes {
                 + ", refTailLogradouro=" + refTailLogradouro + "] \n";
     };
 
+}
+
+
+
+
+
+public ArrayList<NodoLogradouro> getAcidentes(Acidente acidente) {
+   
+    NodoLogradouro aux;
+    int cont = 0;
+    ArrayList lista = new ArrayList<NodoLogradouro>();
+
+    for(NodoLogradouro logradouro : acidente ) {
+        if(logradouro) {
+
+        }
+    }
+
+
+  
 }
