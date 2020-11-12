@@ -114,21 +114,37 @@ public class LeituraArquivo {
         // System.out.println(lista.getLogradouroComMaisAcidentes());
         System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
 
+
+        do {
         System.out.println("Digite um número de 1 a 5");
+        System.out.println();
+        System.out.println("Digite 1 para saber a Rua/av/trav na qual ocorreram mais acidentes.");
+        System.out.println("Digite 2 para saber a rua na qual ocorreram mais acidentes naquela semana.");
+        System.out.println("Digite 3 para saber os acidentes envolvendo motos.");
+        System.out.println();
+
         numero = resposta.nextInt();
-      
+        String rua;
+
             switch (numero) {
 
                 case 1: {
-                    System.out.println(" ");
+                    System.out.println(lista.getLogradouroComMaisAcidentes());
                     break;
                 }
                 case 2: {
-                    System.out.println(" ");
+                    System.out.println("Escreva o nome da Rua/AV/Trav.");
+                    rua = resposta.nextLine();
+                    while(lista.getDiaDaSemanaComMaisAcidentes(rua) == null) {
+                     
+                        System.out.println("Rua não encontrada! Digite novamente.");
+                        rua = resposta.nextLine();    
+                    }
+                    System.out.println(lista.getDiaDaSemanaComMaisAcidentes(rua));
                     break;
                 }
                 case 3: {
-                    System.out.println(" ");
+                    System.out.println(lista.getAcidenteComMoto());
                     break;
                 }
                 case 4: {
@@ -142,10 +158,8 @@ public class LeituraArquivo {
                 default: {
                     System.out.println("Valor Inválido!");  
                     break; 
-                }
-        
+                }      
             }
-        }
-    
-        // System.out.println(lista.getAcidentes("IPIRANGA").toString());
-    }
+        } while(numero <= 0 || numero > 5);
+    }   
+}

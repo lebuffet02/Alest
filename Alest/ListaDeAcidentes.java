@@ -226,7 +226,7 @@ public class ListaDeAcidentes {
     if (refHeadLogradouro != null) {
       aux = refHeadLogradouro;
       for (int i = 1; i <= qtdElem; i++) {
-        if (aux.getNomeLogradouro().equals(rua)) {
+        if (aux.getNomeLogradouro().equalsIgnoreCase(rua)) {
           acidente = aux.getRefHeadAcidente();
           while (acidente != null) {
             controle = 0;
@@ -332,20 +332,27 @@ public class ListaDeAcidentes {
     );
   }
 
-  public int getAcidenteComMoto(NodoAcidente acidente) {
-    ArrayList<NodoAcidente> ruas = new ArrayList<NodoAcidente>();
+  public int getAcidenteComMoto() {
 
+    NodoAcidente acidente;
     NodoLogradouro aux;
     int cont = 0;
     if (refHeadLogradouro != null) {
       aux = refHeadLogradouro;
       for (int i = 1; i <= qtdElem; i++) {
-        if (aux.getNomeLogradouro().equals(acidente.getMoto()));
-        cont++;
         acidente = aux.getRefHeadAcidente();
+        if (acidente != null) {
+          while (acidente.getRefNextAcidente() != null) {
+            if (acidente.getElem().getMoto() > 0) {
+              cont++;
+            }
+            acidente = acidente.getRefNextAcidente();
+          }
+        }
+        aux = aux.getRefNextLogradouro();
       }
-      return cont;
     }
-    return (Integer) null;
+    return cont;
   }
 }
+   
