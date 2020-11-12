@@ -1,4 +1,5 @@
 package Alest;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -8,15 +9,18 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class LeituraArquivo {
 
     public static void main(String[] args) {
-
+        Scanner resposta = new Scanner(System.in);
         String linhas[] = new String[100000];
         int numLinhas = 0;
+        int numero;
 
-        Path filePath = Paths.get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
+        Path filePath = Paths
+                .get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
 
         // Ler o arquivo
         try (BufferedReader reader = Files.newBufferedReader(filePath, Charset.defaultCharset())) {
@@ -30,20 +34,21 @@ public class LeituraArquivo {
         }
 
         // Aceita os seguintes formatos de data/horario
-        // 20200101         (somente data)
-        // 20200101 08:00   (data e horario)
-        // 20200101 8 :00   (horario sem zero à esquerda da hora)
-        Pattern datePattern = Pattern.compile("(\\d{4})(\\d{2})(\\d{2})(?: (?:(\\d{2})|(\\d) ):(\\d{2}))?", Pattern.CASE_INSENSITIVE);
+        // 20200101 (somente data)
+        // 20200101 08:00 (data e horario)
+        // 20200101 8 :00 (horario sem zero à esquerda da hora)
+        Pattern datePattern = Pattern.compile("(\\d{4})(\\d{2})(\\d{2})(?: (?:(\\d{2})|(\\d) ):(\\d{2}))?",
+                Pattern.CASE_INSENSITIVE);
 
-
-        // Mude numLinhas para algum numero pequeno para executar testes mais rapidamente.
+        // Mude numLinhas para algum numero pequeno para executar testes mais
+        // rapidamente.
         // Ex:
 
         ListaDeAcidentes lista = new ListaDeAcidentes();
 
         for (int i = 0; i < numLinhas; i++) {
-        // for (int i = 0; i < numLinhas; i++) {
-            
+            // for (int i = 0; i < numLinhas; i++) {
+
             String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
 
             // Ignorar esta linha caso o campo de endereco nao
@@ -52,7 +57,7 @@ public class LeituraArquivo {
                 continue;
             }
 
-            // Determinar data e horario.        
+            // Determinar data e horario.
             Matcher dateMatcher = datePattern.matcher(campos[2]);
             dateMatcher.matches();
 
@@ -63,19 +68,16 @@ public class LeituraArquivo {
             int hora;
             if (dateMatcher.group(4) != null) {
                 hora = Integer.parseInt(dateMatcher.group(4));
-            }
-            else if (dateMatcher.group(5) != null) {               
+            } else if (dateMatcher.group(5) != null) {
                 hora = Integer.parseInt(dateMatcher.group(5));
-            }
-            else {
+            } else {
                 hora = 0;
             }
 
             int minuto;
             if (dateMatcher.group(6) != null) {
                 minuto = Integer.parseInt(dateMatcher.group(6));
-            }
-            else {
+            } else {
                 minuto = 0;
             }
 
@@ -94,24 +96,52 @@ public class LeituraArquivo {
             int caminhao = Integer.parseInt(campos[11]);
             int moto = Integer.parseInt(campos[12]);
             int carroca = Integer.parseInt(campos[13]);
-            int bicicleta = Integer.parseInt(campos[14]); 
+            int bicicleta = Integer.parseInt(campos[14]);
             String tempo = campos[15];
             String turno = campos[16];
             String regiao = campos[17];
 
-            Acidente acidente = new Acidente(logradouro, nomeLog,tipoAcidente, data, diaSemana,
-            feridos,fatais,auto,taxis,lotacao,onibusUrb,onibusInt, caminhao,
-            moto,carroca,bicicleta,tempo,turno, regiao);
+            Acidente acidente = new Acidente(logradouro, nomeLog, tipoAcidente, data, diaSemana, feridos, fatais, auto,
+                    taxis, lotacao, onibusUrb, onibusInt, caminhao, moto, carroca, bicicleta, tempo, turno, regiao);
 
             lista.addLogradouroAcidente(acidente);
-            // System.out.println(logradouro + " " + nomeLog + "; " + tipoAcidente + "; " + data.toString() + "; " + tempo + "; " + turno + "; " + regiao); 
         }
 
-        // System.out.println(lista.getAcidentes("VENANCIO AIRES"));
+        do {
+            System.out.println("Digite um número de 1 a 5");
+            System.out.println();
+            System.out.println("Digite 1 para saber a Rua/av/trav na qual ocorreram mais acidentes.");
+            System.out.println("Digite 2 para saber a rua na qual ocorreram mais acidentes naquela semana.");
+            System.out.println("Digite 3 para saber os acidentes envolvendo motos.");
+            System.out.println();
 
-        // System.out.println(lista.getLogradouroComMaisAcidentes());
-        System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
+            numero = resposta.nextInt();
+            String rua;
 
-        // System.out.println(lista.getAcidentes("IPIRANGA").toString());
+            switch (numero) {
+                case 1: {
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
+                    System.out.println(lista.getLogradouroComMaisAcidentes());
+                    break;
+                }
+                case 2: {
+                    Scanner resposta2 = new Scanner(System.in);
+                    System.out.println("Escreva o nome da Rua/AV/Trav.");
+                    rua = resposta2.nextLine();
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
+                    System.out.println(lista.getDiaDaSemanaComMaisAcidentes(rua));
+                    break;
+                }
+                case 3: {
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
+                    System.out.println(lista.getAcidenteComMoto());
+                    break;
+                }
+                default: {
+                    System.out.println("Valor Inválido!");
+                    break;
+                }
+            }
+        } while (numero != 0);
     }
 }
