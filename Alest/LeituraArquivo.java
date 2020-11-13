@@ -1,4 +1,5 @@
 package Alest;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -18,7 +19,8 @@ public class LeituraArquivo {
         int numLinhas = 0;
         int numero;
 
-        Path filePath = Paths.get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
+        Path filePath = Paths
+                .get("C:/Users/eduar/Desktop/pucrs/Algoritmos e Estruturas/exercicio_avaliacao/Alest/acidentes.csv");
 
         // Ler o arquivo
         try (BufferedReader reader = Files.newBufferedReader(filePath, Charset.defaultCharset())) {
@@ -32,20 +34,21 @@ public class LeituraArquivo {
         }
 
         // Aceita os seguintes formatos de data/horario
-        // 20200101         (somente data)
-        // 20200101 08:00   (data e horario)
-        // 20200101 8 :00   (horario sem zero à esquerda da hora)
-        Pattern datePattern = Pattern.compile("(\\d{4})(\\d{2})(\\d{2})(?: (?:(\\d{2})|(\\d) ):(\\d{2}))?", Pattern.CASE_INSENSITIVE);
+        // 20200101 (somente data)
+        // 20200101 08:00 (data e horario)
+        // 20200101 8 :00 (horario sem zero à esquerda da hora)
+        Pattern datePattern = Pattern.compile("(\\d{4})(\\d{2})(\\d{2})(?: (?:(\\d{2})|(\\d) ):(\\d{2}))?",
+                Pattern.CASE_INSENSITIVE);
 
-
-        // Mude numLinhas para algum numero pequeno para executar testes mais rapidamente.
+        // Mude numLinhas para algum numero pequeno para executar testes mais
+        // rapidamente.
         // Ex:
 
         ListaDeAcidentes lista = new ListaDeAcidentes();
 
         for (int i = 0; i < numLinhas; i++) {
-        // for (int i = 0; i < numLinhas; i++) {
-            
+            // for (int i = 0; i < numLinhas; i++) {
+
             String[] campos = linhas[i].split(";"); // divide a string pelo espaco em branco
 
             // Ignorar esta linha caso o campo de endereco nao
@@ -54,7 +57,7 @@ public class LeituraArquivo {
                 continue;
             }
 
-            // Determinar data e horario.        
+            // Determinar data e horario.
             Matcher dateMatcher = datePattern.matcher(campos[2]);
             dateMatcher.matches();
 
@@ -65,19 +68,16 @@ public class LeituraArquivo {
             int hora;
             if (dateMatcher.group(4) != null) {
                 hora = Integer.parseInt(dateMatcher.group(4));
-            }
-            else if (dateMatcher.group(5) != null) {               
+            } else if (dateMatcher.group(5) != null) {
                 hora = Integer.parseInt(dateMatcher.group(5));
-            }
-            else {
+            } else {
                 hora = 0;
             }
 
             int minuto;
             if (dateMatcher.group(6) != null) {
                 minuto = Integer.parseInt(dateMatcher.group(6));
-            }
-            else {
+            } else {
                 minuto = 0;
             }
 
@@ -96,17 +96,15 @@ public class LeituraArquivo {
             int caminhao = Integer.parseInt(campos[11]);
             int moto = Integer.parseInt(campos[12]);
             int carroca = Integer.parseInt(campos[13]);
-            int bicicleta = Integer.parseInt(campos[14]); 
+            int bicicleta = Integer.parseInt(campos[14]);
             String tempo = campos[15];
             String turno = campos[16];
             String regiao = campos[17];
 
-            Acidente acidente = new Acidente(logradouro, nomeLog,tipoAcidente, data, diaSemana,
-            feridos,fatais,auto,taxis,lotacao,onibusUrb,onibusInt, caminhao,
-            moto,carroca,bicicleta,tempo,turno, regiao);
+            Acidente acidente = new Acidente(logradouro, nomeLog, tipoAcidente, data, diaSemana, feridos, fatais, auto,
+                    taxis, lotacao, onibusUrb, onibusInt, caminhao, moto, carroca, bicicleta, tempo, turno, regiao);
 
             lista.addLogradouroAcidente(acidente);
-            // System.out.println(logradouro + " " + nomeLog + "; " + tipoAcidente + "; " + data.toString() + "; " + tempo + "; " + turno + "; " + regiao); 
         }
     }
 }
@@ -129,23 +127,21 @@ public class LeituraArquivo {
         numero = resposta.nextInt();
 
             switch (numero) {
-
                 case 1: {
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
                     System.out.println(lista.getLogradouroComMaisAcidentes());
                     break;
                 }
                 case 2: {
+                    Scanner resposta2 = new Scanner(System.in);
                     System.out.println("Escreva o nome da Rua/AV/Trav.");
-                    rua = resposta.nextLine();
-                    while(lista.getDiaDaSemanaComMaisAcidentes(rua) == null) {
-                     
-                        System.out.println("Rua não encontrada! Digite novamente.");
-                        rua = resposta.nextLine();    
-                    }
+                    rua = resposta2.nextLine();
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
                     System.out.println(lista.getDiaDaSemanaComMaisAcidentes(rua));
                     break;
                 }
                 case 3: {
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
                     System.out.println(lista.getAcidenteComMoto());
                     break;
                 }
@@ -198,10 +194,6 @@ public class LeituraArquivo {
                     System.out.println(" ");
                     break;
                 }
-                default: {
-                    System.out.println("Valor Inválido!");  
-                    break; 
-                }      
             }
         } while(numero > 0 && numero < 5);
     }   
