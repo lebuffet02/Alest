@@ -7,6 +7,8 @@
 package Alest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 // Temos que ter dois nodos um de logradouros e outro de acidentes, ao adicionar um novo acidente identificamos um nodo com o nomeLogradouro ja existe dentro dos nossos nodos de logradouro, caso ja exista simplesmente adicionamos o acidente dentro dessa lista, caso ele nao exista criamos um nodoLogradouro e colocamos como headAcidente pois ele sera o primeiro acidente da lista
@@ -75,17 +77,8 @@ public class ListaDeAcidentes {
 
     @Override
     public String toString() {
-      return (
-        "NodoLogradouro [nomeLogradouro=" +
-        nomeLogradouro +
-        ", refHeadAcidente=" +
-        refHeadAcidente +
-        ", refNextLogradouro=" +
-        refNextLogradouro +
-        ", tipoLogradouro=" +
-        tipoLogradouro +
-        "] \n"
-      );
+      return ("NodoLogradouro [nomeLogradouro=" + nomeLogradouro + ", refHeadAcidente=" + refHeadAcidente
+          + ", refNextLogradouro=" + refNextLogradouro + ", tipoLogradouro=" + tipoLogradouro + "] \n");
     }
   }
 
@@ -125,13 +118,7 @@ public class ListaDeAcidentes {
 
     @Override
     public String toString() {
-      return (
-        "NodoAcidente [elem=" +
-        elem +
-        ", refNextAcidente=" +
-        refNextAcidente +
-        "] \n"
-      );
+      return ("NodoAcidente [elem=" + elem + ", refNextAcidente=" + refNextAcidente + "] \n");
     }
 
     public Object getMoto() {
@@ -143,7 +130,8 @@ public class ListaDeAcidentes {
   private NodoLogradouro refTailLogradouro = null;
   private int qtdElem = 0;
 
-  public ListaDeAcidentes() {}
+  public ListaDeAcidentes() {
+  }
 
   public boolean addLogradouroAcidente(Acidente acidente) {
     NodoLogradouro ant, novo, prox = null;
@@ -232,16 +220,13 @@ public class ListaDeAcidentes {
             controle = 0;
             object = new ObjetoDiaDaSemana(acidente.getElem().getDiaSemana());
             for (int j = 0; j < listaDiasDasemana.size(); j++) {
-              if (
-                object
-                  .getDiaDaSemana()
-                  .equals(listaDiasDasemana.get(j).getDiaDaSemana())
-              ) {
+              if (object.getDiaDaSemana().equals(listaDiasDasemana.get(j).getDiaDaSemana())) {
                 listaDiasDasemana.get(j).aumentaAcidentes();
                 controle = 1;
               }
             }
-            if (controle == 0) listaDiasDasemana.add(object);
+            if (controle == 0)
+              listaDiasDasemana.add(object);
             acidente = acidente.getRefNextAcidente();
           }
         }
@@ -267,7 +252,8 @@ public class ListaDeAcidentes {
     if (refHeadLogradouro != null) {
       aux = refHeadLogradouro;
       for (i = 1; i <= qtdElem; i++) {
-        if (aux.getNomeLogradouro().equals(nomeLogradouro)) return aux;
+        if (aux.getNomeLogradouro().equals(nomeLogradouro))
+          return aux;
         aux = aux.getRefNextLogradouro();
       }
     }
@@ -299,6 +285,74 @@ public class ListaDeAcidentes {
     return lista;
   }
 
+  public int getAcidenteComMoto() {
+    NodoAcidente acidente;
+    NodoLogradouro aux;
+    int cont = 0;
+    if (refHeadLogradouro != null) {
+      aux = refHeadLogradouro;
+      for (int i = 1; i <= qtdElem; i++) {
+        acidente = aux.getRefHeadAcidente();
+        if (acidente != null) {
+          if (acidente.getElem().getMoto() > 0) {
+            cont++;
+          }
+          while (acidente.getRefNextAcidente() != null) {
+            if (acidente.getElem().getMoto() > 0) {
+              cont++;
+            }
+            acidente = acidente.getRefNextAcidente();
+          }
+        }
+        aux = aux.getRefNextLogradouro();
+      }
+    }
+    return cont;
+  }
+
+  public ArrayList<ObjetoLogAcidente> navegarLogradouros() {
+    ArrayList<ObjetoLogAcidente> lista = new ArrayList<>();
+    NodoLogradouro aux;
+    NodoAcidente acidente;
+    int cont = 0;
+    ObjetoLogAcidente object;
+
+    if (refHeadLogradouro != null) {
+      aux = refHeadLogradouro;
+      for (int i = 1; i <= qtdElem; i++) {
+        acidente = aux.getRefHeadAcidente();
+        if (acidente != null) {
+          cont++;
+          while (acidente.getRefNextAcidente() != null) {
+            cont++;
+            acidente = acidente.getRefNextAcidente();
+          }
+        }
+        object = new ObjetoLogAcidente(aux.getNomeLogradouro(), cont);
+        lista.add(object);
+        cont = 0;
+        aux = aux.getRefNextLogradouro();
+      }
+      Collections.sort(lista, new Comparator<ObjetoLogAcidente>() {
+        public int compare(ObjetoLogAcidente o1, ObjetoLogAcidente o2) {
+          int comp = o1.getNomeLog().compareTo(o2.getNomeLog());
+          if (comp < 0) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+      });
+    }
+    return lista;
+  }
+
+  public ObjetoLogAcidente getListaPosicao(int index) {
+    ArrayList<ObjetoLogAcidente> lista = navegarLogradouros();
+    ObjetoLogAcidente object = lista.get(index);
+    return object;
+  }
+
   public NodoLogradouro getRefHeadLogradouro() {
     return refHeadLogradouro;
   }
@@ -321,38 +375,8 @@ public class ListaDeAcidentes {
 
   @Override
   public String toString() {
-    return (
-      "ListaDeAcidentes [qtdElem=" +
-      qtdElem +
-      ", refHeadLogradouro=" +
-      refHeadLogradouro +
-      ", refTailLogradouro=" +
-      refTailLogradouro +
-      "] \n"
-    );
+    return ("ListaDeAcidentes [qtdElem=" + qtdElem + ", refHeadLogradouro=" + refHeadLogradouro + ", refTailLogradouro="
+        + refTailLogradouro + "] \n");
   }
 
-  public int getAcidenteComMoto() {
-
-    NodoAcidente acidente;
-    NodoLogradouro aux;
-    int cont = 0;
-    if (refHeadLogradouro != null) {
-      aux = refHeadLogradouro;
-      for (int i = 1; i <= qtdElem; i++) {
-        acidente = aux.getRefHeadAcidente();
-        if (acidente != null) {
-          while (acidente.getRefNextAcidente() != null) {
-            if (acidente.getElem().getMoto() > 0) {
-              cont++;
-            }
-            acidente = acidente.getRefNextAcidente();
-          }
-        }
-        aux = aux.getRefNextLogradouro();
-      }
-    }
-    return cont;
-  }
 }
-   

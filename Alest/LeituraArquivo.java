@@ -108,11 +108,12 @@ public class LeituraArquivo {
         }
 
         do {
-            System.out.println("Digite um número de 1 a 5");
+            System.out.println("Digite um número de 1 a 4");
             System.out.println();
             System.out.println("Digite 1 para saber a Rua/av/trav na qual ocorreram mais acidentes.");
             System.out.println("Digite 2 para saber a rua na qual ocorreram mais acidentes naquela semana.");
-            System.out.println("Digite 3 para saber os acidentes envolvendo motos.");
+            System.out.println("Digite 3 para saber o total de acidentes envolvendo motos.");
+            System.out.println("Digite 4 para navegar entre os logradouros");
             System.out.println();
 
             numero = resposta.nextInt();
@@ -135,6 +136,46 @@ public class LeituraArquivo {
                 case 3: {
                     System.out.println(">>>>>>>>>>>>>>>>>>>>> Resposta");
                     System.out.println(lista.getAcidenteComMoto());
+                    break;
+                }
+                case 4: {
+                    String avancarRetroceder;
+                    Scanner sc = new Scanner(System.in);
+                    int index = 0;
+                    System.out.println(lista.getListaPosicao(index));
+                    do{
+                        System.out.println("1 - Digite A para avancar entre as ruas");
+                        System.out.println("2 - Digite V para retroceder entre as ruas");
+                        System.out.println("3 - Digite SAIR para voltar ao menu");
+                        
+                        avancarRetroceder = sc.nextLine();
+
+                        switch(avancarRetroceder) { 
+                            case "A": {
+                                index++;
+                                if(index > lista.getQtdElem()) {
+                                    System.out.println("Nao ha nenhum logradouro apos este favor voltar");
+                                    index = lista.getQtdElem();
+                                    break;
+                                }
+                                System.out.println(lista.getListaPosicao(index));
+                                break;
+                            }
+                            case "V": {
+                                index--;
+                                if(index < 0) {
+                                    System.out.println("Nao ha nenhum logradouro anterior favor avancar");
+                                    index = 0;
+                                    break;
+                                }
+                                System.out.println(lista.getListaPosicao(index));
+                                break;
+                            }
+                            default : {
+                                System.out.println("Letra Inválida!");      
+                            }
+                        }
+                    } while(!avancarRetroceder.equalsIgnoreCase("SAIR"));
                     break;
                 }
                 default: {
