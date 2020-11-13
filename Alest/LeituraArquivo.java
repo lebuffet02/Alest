@@ -108,23 +108,25 @@ public class LeituraArquivo {
             lista.addLogradouroAcidente(acidente);
             // System.out.println(logradouro + " " + nomeLog + "; " + tipoAcidente + "; " + data.toString() + "; " + tempo + "; " + turno + "; " + regiao); 
         }
-
+    }
+}
         // System.out.println(lista.getAcidentes("VENANCIO AIRES"));
 
         // System.out.println(lista.getLogradouroComMaisAcidentes());
-        System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
+       // System.out.println(lista.getDiaDaSemanaComMaisAcidentes("VENANCIO AIRES"));
 
-
+        //String rua;
+        //String avancarRetroceder;
+        /*
         do {
         System.out.println("Digite um número de 1 a 5");
         System.out.println();
         System.out.println("Digite 1 para saber a Rua/av/trav na qual ocorreram mais acidentes.");
         System.out.println("Digite 2 para saber a rua na qual ocorreram mais acidentes naquela semana.");
         System.out.println("Digite 3 para saber os acidentes envolvendo motos.");
-        System.out.println();
+        System.out.println("Digite 4 para navegar pelos acidentes ordenados por Rua/av/trav.");
 
         numero = resposta.nextInt();
-        String rua;
 
             switch (numero) {
 
@@ -148,7 +150,48 @@ public class LeituraArquivo {
                     break;
                 }
                 case 4: {
-                    System.out.println(" ");
+                    do{
+                        
+                        switch(avancarRetroceder)   {
+            
+                            case "A": {
+                                System.out.println("Digite 'A' para avançar.");
+                                avancarRetroceder = resposta.nextLine();
+                                avancarRetroceder = avancarRetroceder.toUpperCase();
+
+                                if(avancarRetroceder.length() > 0) {
+                                    System.out.println("Inválido. Digite 'A' para funcionar.");
+                                    break;
+                                }
+                                else {                                
+                                    avancarRetroceder = lista.getLogradouro();
+                                    System.out.println(" " + );
+                                    break;
+                                }
+                            }
+            
+                            case "V": {
+                                System.out.println("Digite 'V' para voltar.");
+                                avancarRetroceder = resposta.nextLine();
+                                avancarRetroceder = avancarRetroceder.toUpperCase();
+
+                                if(avancarRetroceder.length() > 0) {
+                                    System.out.println("Inválido. Digite 'V' para funcionar.");
+                                    break;
+                                }
+                                else {
+                                System.out.println(" " + );
+                                break;
+                                }
+                            }
+                            
+                            default : {
+                                System.out.println("Letra Inválida!");
+                            }
+            
+                        }
+                        
+                    } while();
                     break;
                 }
                 case 5: {
@@ -160,6 +203,7 @@ public class LeituraArquivo {
                     break; 
                 }      
             }
-        } while(numero <= 0 || numero > 5);
+        } while(numero > 0 && numero < 5);
     }   
 }
+*/
